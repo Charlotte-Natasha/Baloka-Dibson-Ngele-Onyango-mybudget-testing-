@@ -1,6 +1,8 @@
 from datetime import datetime
 
 
+# 1 ere fonction : << Calcul des dépenses totales >>
+
 def calculate_total_spent(transactions, category=None, start_date=None, end_date=None):
     total = 0
 
@@ -26,3 +28,18 @@ def calculate_total_spent(transactions, category=None, start_date=None, end_date
         total += tx["amount"]
 
     return total
+
+
+
+
+# 2 eme fonction : << calculate_remaining_budget >>
+
+def calculate_remaining_budget(total_spent, budget_amount):
+    """
+    Retourne le budget restant.
+    Peut être négatif si le budget est dépassé.
+    """
+    return budget_amount - total_spent
+
+
+# 3 eme fonction : << calculate_remaining_budget >>
