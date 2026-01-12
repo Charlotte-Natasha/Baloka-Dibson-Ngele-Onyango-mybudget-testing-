@@ -61,6 +61,18 @@ def calculate_consumption_percentage(total_spent, budget_amount):
 
 
 
+# 3 eme fonction : << is_budget_exceeded >>
+
+def is_budget_exceeded(total_spent, budget_amount):
+    """
+    Retourne True si le budget est dépassé, sinon False.
+    """
+    return total_spent > budget_amount
+
+
+
+
+
 
 
 

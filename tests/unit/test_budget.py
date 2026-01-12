@@ -71,3 +71,27 @@ def test_calculate_consumption_percentage_over_budget():
 
     assert percent == 150
 
+
+
+
+# tests de la fonction << is_budget_exceeded >> : 
+
+from budgetapp.services.budget_service import is_budget_exceeded
+
+
+def test_is_budget_exceeded_true():
+    total_spent = 250
+    budget_amount = 200
+
+    result = is_budget_exceeded(total_spent, budget_amount)
+
+    assert result is True
+
+
+def test_is_budget_exceeded_false():
+    total_spent = 150
+    budget_amount = 200
+
+    result = is_budget_exceeded(total_spent, budget_amount)
+
+    assert result is False
