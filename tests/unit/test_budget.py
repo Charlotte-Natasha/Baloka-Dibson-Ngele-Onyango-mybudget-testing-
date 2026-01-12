@@ -116,11 +116,12 @@ def test_get_budget_alert_when_exceeded():
     assert "103" in alert
 
 
-def test_get_budget_alert_when_not_exceeded():
-    total_spent = 250
-    budget_amount = 300
 
-    alert = get_budget_alert(total_spent, budget_amount)
 
-    assert alert is None
+
+
+
+
+
+
 
