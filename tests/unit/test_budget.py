@@ -95,3 +95,32 @@ def test_is_budget_exceeded_false():
     result = is_budget_exceeded(total_spent, budget_amount)
 
     assert result is False
+
+
+
+
+
+# tests de la fonction << get_budget_alert >> : 
+
+from budgetapp.services.budget_service import get_budget_alert
+
+
+def test_get_budget_alert_when_exceeded():
+    total_spent = 310
+    budget_amount = 300
+
+    alert = get_budget_alert(total_spent, budget_amount)
+
+    assert alert is not None
+    assert "10" in alert
+    assert "103" in alert
+
+
+def test_get_budget_alert_when_not_exceeded():
+    total_spent = 250
+    budget_amount = 300
+
+    alert = get_budget_alert(total_spent, budget_amount)
+
+    assert alert is None
+

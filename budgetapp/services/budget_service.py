@@ -61,13 +61,39 @@ def calculate_consumption_percentage(total_spent, budget_amount):
 
 
 
-# 3 eme fonction : << is_budget_exceeded >>
+# 4 eme fonction : << is_budget_exceeded >>
 
 def is_budget_exceeded(total_spent, budget_amount):
     """
     Retourne True si le budget est dépassé, sinon False.
     """
     return total_spent > budget_amount
+
+
+
+
+
+# 5 eme fonction : << get_budget_alert >>
+
+
+def get_budget_alert(total_spent, budget_amount):
+    """
+    Returns an alert message if the budget is exceeded, otherwise None.
+    """
+    if budget_amount == 0:
+        return None
+
+    if total_spent <= budget_amount:
+        return None
+
+    over = total_spent - budget_amount
+    percentage = (total_spent / budget_amount) * 100
+
+    return f"ALERTE : Budget dépassé de {over} € ({percentage:.1f}%)"
+
+
+
+
 
 
 
