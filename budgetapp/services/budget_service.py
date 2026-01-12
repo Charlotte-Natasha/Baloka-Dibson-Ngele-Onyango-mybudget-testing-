@@ -42,4 +42,28 @@ def calculate_remaining_budget(total_spent, budget_amount):
     return budget_amount - total_spent
 
 
-# 3 eme fonction : << calculate_remaining_budget >>
+
+
+
+# 3 eme fonction : << calculate_consumption_percentage >>
+
+
+def calculate_consumption_percentage(total_spent, budget_amount):
+    """
+    Retourne le pourcentage du budget consommé.
+    Peut dépasser 100 si le budget est dépassé.
+    """
+    if budget_amount == 0:
+        raise ValueError("Le budget ne peut pas être égal à 0.")
+
+    return int((total_spent / budget_amount) * 100)
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-# test de la fonction Calcul des dépenses totales: 
+# tests de la fonction << Calcul des dépenses totales >> : 
 
 from budgetapp.services.budget_service import calculate_total_spent
 
@@ -23,7 +23,7 @@ def test_calculate_total_spent_for_category_and_period():
 
 
 
-# test de la fonction calculate_remaining_budget : 
+# tests de la fonction << calculate_remaining_budget >> : 
 
 from budgetapp.services.budget_service import calculate_remaining_budget
 
@@ -44,3 +44,30 @@ def test_calculate_remaining_budget_over_limit():
     remaining = calculate_remaining_budget(total_spent, budget_amount)
 
     assert remaining == -50
+
+
+
+
+
+# tests de la fonction << calculate_consumption_percentage >> : 
+
+from budgetapp.services.budget_service import calculate_consumption_percentage
+
+
+def test_calculate_consumption_percentage_normal():
+    total_spent = 50
+    budget_amount = 200
+
+    percent = calculate_consumption_percentage(total_spent, budget_amount)
+
+    assert percent == 25
+
+
+def test_calculate_consumption_percentage_over_budget():
+    total_spent = 300
+    budget_amount = 200
+
+    percent = calculate_consumption_percentage(total_spent, budget_amount)
+
+    assert percent == 150
+
