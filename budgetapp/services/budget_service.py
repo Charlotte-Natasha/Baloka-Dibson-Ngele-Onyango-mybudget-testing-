@@ -77,9 +77,6 @@ def is_budget_exceeded(total_spent, budget_amount):
 
 
 def get_budget_alert(total_spent, budget_amount):
-    """
-    Returns an alert message if the budget is exceeded, otherwise None.
-    """
     if budget_amount == 0:
         return None
 
@@ -89,10 +86,7 @@ def get_budget_alert(total_spent, budget_amount):
     over = total_spent - budget_amount
     percentage = (total_spent / budget_amount) * 100
 
-    return f"ALERTE : Budget dépassé de {over} € ({percentage:.1f}%)"
-
-
-
+    return f"Budget exceeded by {over} ({percentage:.1f}%)"
 
 
 
