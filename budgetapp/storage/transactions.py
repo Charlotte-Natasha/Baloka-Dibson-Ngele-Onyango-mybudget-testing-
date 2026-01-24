@@ -1,4 +1,9 @@
+from budgetapp.storage.db import get_connection
+
 def create_transaction(conn, data):
+    if conn is None:
+        conn = get_connection()
+        
     cursor = conn.cursor()
 
     description = data.get("description", "")
