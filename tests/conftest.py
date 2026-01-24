@@ -1,4 +1,3 @@
-# tests/conftest.py
 import pytest
 from budgetapp.storage.db import init_db, get_connection
 
@@ -12,7 +11,14 @@ def setup_db():
     
     # Provide a connection if needed
     conn = get_connection()
-    yield conn
     
-    # Close connection after tests
+    # CLEAR TABLES BEFORE EACH MODULE
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM transactions")
+    cursor.execute("DELETE FROM budgets")
+    conn.commit()
+
+    yield conn
     conn.close()
+
+
