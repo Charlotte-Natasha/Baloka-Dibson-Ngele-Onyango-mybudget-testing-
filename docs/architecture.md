@@ -1,0 +1,1 @@
+The service layer contains all the business logic of the application. It is responsible for computing totals, remaining budget, consumption percentages, and alert messages. Importantly, this layer does not interact directly with the database, which keeps it easy to test and maintain.

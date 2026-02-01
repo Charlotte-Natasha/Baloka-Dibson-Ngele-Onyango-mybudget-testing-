@@ -1,0 +1,122 @@
+from budgetapp.storage.db import get_connection
+from budgetapp.services.budget_service import (
+    calculate_total_spent,
+    calculate_remaining_budget,
+    calculate_consumption_percentage,
+    is_budget_exceeded,
+    get_budget_alert
+)
+from budgetapp.storage.transactions import get_transactions
+
+
+# -------------------------------
+# Budget operations
+# -------------------------------
+
+def create_budget(category: str, period: str, amount: float):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO budgets (category, period, amount) VALUES (?, ?, ?)",
+        (category, period, amount)
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_budget(category: str, period: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT id, category, period, amount FROM budgets WHERE category=? AND period=?",
+        (category, period)
+    )
+    row = cur.fetchone()
+    conn.close()
+
+    if row is None:
+        return None
+
+    return {
+        "id": row[0],
+        "category": row[1],
+        "period": row[2],
+        "amount": row[3]
+    }
+
+
+def list_budgets():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT category, period, amount FROM budgets ORDER BY period")
+    rows = cur.fetchall()
+    conn.close()
+
+    return [
+        {"category": r[0], "period": r[1], "amount": r[2]}
+        for r in rows
+    ]
+
+
+def delete_budget(category: str, period: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM budgets WHERE category=? AND period=?",
+        (category, period)
+    )
+    conn.commit()
+    conn.close()
+
+
+# -------------------------------
+# Budget calculation / reporting
+# -------------------------------
+
+def get_budget_status(category: str, period: str):
+    """
+    Returns a full budget report for a category + period:
+    - total spent
+    - remaining
+    - consumption %
+    - exceeded? True/False
+    - alert message if exceeded
+    """
+    budget = get_budget(category, period)
+    if not budget:
+        return None
+
+    # Fetch raw transactions (tuples)
+    conn = get_connection()
+    raw_transactions = get_transactions(conn, category=category, period=period)
+    conn.close()
+
+    # Convert tuples → dicts (required by budget_service)
+    transactions = [
+        {
+            "id": tx[0],
+            "amount": tx[1],
+            "date": tx[2],
+            "type": tx[3],
+            "category": tx[4],
+            "description": tx[5]
+        }
+        for tx in raw_transactions
+    ]
+
+    total_spent = calculate_total_spent(transactions)
+    remaining = calculate_remaining_budget(total_spent, budget["amount"])
+    consumption_pct = calculate_consumption_percentage(total_spent, budget["amount"])
+    exceeded = is_budget_exceeded(total_spent, budget["amount"])
+    alert = get_budget_alert(total_spent, budget["amount"])
+
+    return {
+        "category": category,
+        "period": period,
+        "budget_amount": budget["amount"],
+        "total_spent": total_spent,
+        "remaining": remaining,
+        "consumption_pct": consumption_pct,
+        "exceeded": exceeded,
+        "alert": alert
+    }

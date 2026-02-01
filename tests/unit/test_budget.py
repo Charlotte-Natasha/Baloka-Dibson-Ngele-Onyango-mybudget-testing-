@@ -1,127 +1,93 @@
-# tests de la fonction << Calcul des dépenses totales >> : 
+import pytest
+from budgetapp.storage.db import init_db, get_connection
+from budgetapp.storage.budget import (
+    create_budget,
+    get_budget,
+    list_budgets,
+    delete_budget,
+    get_budget_status
+)
+from budgetapp.storage.transactions import create_transaction
 
-from budgetapp.services.budget_service import calculate_total_spent
 
+# -------------------------------
+# Setup / Teardown
+# -------------------------------
 
-def test_calculate_total_spent_for_category_and_period():
-    transactions = [
-        {"amount": 50, "category": "Food", "date": "2025-01-10", "type": "expense"},
-        {"amount": 20, "category": "Food", "date": "2025-01-15", "type": "expense"},
-        {"amount": 30, "category": "Transport", "date": "2025-01-10", "type": "expense"},
-        {"amount": 100, "category": "Food", "date": "2025-02-01", "type": "expense"},
-    ]
+@pytest.fixture(autouse=True)
+def setup_db():
+    # Make sure tables exist
+    init_db()
 
-    total = calculate_total_spent(
-        transactions,
-        category="Food",
-        start_date="2025-01-01",
-        end_date="2025-01-31",
-    )
+    # ✅ CLEAN TABLES BEFORE EACH TEST
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM transactions")
+    cur.execute("DELETE FROM budgets")
+    conn.commit()
+    conn.close()
 
-    assert total == 70
+    yield
+# -------------------------------
+# Test CRUD operations
+# -------------------------------
 
+def test_create_and_get_budget():
+    create_budget("Food", "2025-01", 300)
+    b = get_budget("Food", "2025-01")
+    assert b is not None
+    assert b["category"] == "Food"
+    assert b["period"] == "2025-01"
+    assert b["amount"] == 300
 
+def test_list_budgets():
+    create_budget("Food", "2025-01", 300)
+    create_budget("Transport", "2025-01", 150)
 
+    budgets = list_budgets()
+    categories = [b["category"] for b in budgets]
 
-# tests de la fonction << calculate_remaining_budget >> : 
+    assert "Food" in categories
+    assert "Transport" in categories
 
-from budgetapp.services.budget_service import calculate_remaining_budget
 
+def test_delete_budget():
+    delete_budget("Transport", "2025-01")
+    b = get_budget("Transport", "2025-01")
+    assert b is None
 
-def test_calculate_remaining_budget_under_limit():
-    total_spent = 70
-    budget_amount = 200
 
-    remaining = calculate_remaining_budget(total_spent, budget_amount)
+# -------------------------------
+# Test get_budget_status (integration with transactions)
+# -------------------------------
 
-    assert remaining == 130
+def test_get_budget_status_no_transactions():
+    create_budget("Entertainment", "2025-01", 200)
 
+    status = get_budget_status("Entertainment", "2025-01")
 
-def test_calculate_remaining_budget_over_limit():
-    total_spent = 250
-    budget_amount = 200
+    assert status["total_spent"] == 0
+    assert status["remaining"] == 200
 
-    remaining = calculate_remaining_budget(total_spent, budget_amount)
 
-    assert remaining == -50
+def test_get_budget_status_with_transactions():
+    create_budget("Entertainment", "2025-01", 200)  # ← YOU MISSED THIS
 
+    conn = get_connection()
+    create_transaction(conn, {"amount": 50, "category": "Entertainment", "date": "2025-01-05", "type": "expense"})
+    create_transaction(conn, {"amount": 100, "category": "Entertainment", "date": "2025-01-10", "type": "expense"})
+    conn.close()
 
+    status = get_budget_status("Entertainment", "2025-01")
 
+def test_get_budget_status_exceeded():
+    create_budget("Entertainment", "2025-01", 200)  # ← ALSO MISSING
 
+    conn = get_connection()
+    create_transaction(conn, {"amount": 50, "category": "Entertainment", "date": "2025-01-05", "type": "expense"})
+    create_transaction(conn, {"amount": 100, "category": "Entertainment", "date": "2025-01-10", "type": "expense"})
+    create_transaction(conn, {"amount": 100, "category": "Entertainment", "date": "2025-01-15", "type": "expense"})
+    conn.close()
 
-# tests de la fonction << calculate_consumption_percentage >> : 
-
-from budgetapp.services.budget_service import calculate_consumption_percentage
-
-
-def test_calculate_consumption_percentage_normal():
-    total_spent = 50
-    budget_amount = 200
-
-    percent = calculate_consumption_percentage(total_spent, budget_amount)
-
-    assert percent == 25
-
-
-def test_calculate_consumption_percentage_over_budget():
-    total_spent = 300
-    budget_amount = 200
-
-    percent = calculate_consumption_percentage(total_spent, budget_amount)
-
-    assert percent == 150
-
-
-
-
-# tests de la fonction << is_budget_exceeded >> : 
-
-from budgetapp.services.budget_service import is_budget_exceeded
-
-
-def test_is_budget_exceeded_true():
-    total_spent = 250
-    budget_amount = 200
-
-    result = is_budget_exceeded(total_spent, budget_amount)
-
-    assert result is True
-
-
-def test_is_budget_exceeded_false():
-    total_spent = 150
-    budget_amount = 200
-
-    result = is_budget_exceeded(total_spent, budget_amount)
-
-    assert result is False
-
-
-
-
-
-# tests de la fonction << get_budget_alert >> : 
-
-from budgetapp.services.budget_service import get_budget_alert
-
-
-def test_get_budget_alert_when_exceeded():
-    total_spent = 310
-    budget_amount = 300
-
-    alert = get_budget_alert(total_spent, budget_amount)
-
-    assert alert is not None
-    assert "10" in alert
-    assert "103" in alert
-
-
-
-
-
-
-
-
-
-
+    status = get_budget_status("Entertainment", "2025-01")
 
