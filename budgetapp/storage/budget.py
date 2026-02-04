@@ -9,9 +9,7 @@ from budgetapp.services.budget_service import (
 from budgetapp.storage.transactions import get_transactions
 
 
-# -------------------------------
 # Budget operations
-# -------------------------------
 
 def create_budget(category: str, period: str, amount: float):
     conn = get_connection()
@@ -69,54 +67,62 @@ def delete_budget(category: str, period: str):
     conn.close()
 
 
-# -------------------------------
 # Budget calculation / reporting
-# -------------------------------
 
 def get_budget_status(category: str, period: str):
-    """
-    Returns a full budget report for a category + period:
-    - total spent
-    - remaining
-    - consumption %
-    - exceeded? True/False
-    - alert message if exceeded
-    """
-    budget = get_budget(category, period)
-    if not budget:
-        return None
-
-    # Fetch raw transactions (tuples)
     conn = get_connection()
-    raw_transactions = get_transactions(conn, category=category, period=period)
-    conn.close()
+    try:
+        # 1. Fetch budget details directly to keep the connection alive
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT amount FROM budgets WHERE category=? AND period=?",
+            (category, period)
+        )
+        budget_row = cur.fetchone()
+        
+        # If no budget exists, return None immediately
+        if budget_row is None:
+            return None
+        
+        budget_amount = budget_row[0]
 
-    # Convert tuples → dicts (required by budget_service)
-    transactions = [
-        {
-            "id": tx[0],
-            "amount": tx[1],
-            "date": tx[2],
-            "type": tx[3],
-            "category": tx[4],
-            "description": tx[5]
+        # 2. Fetch raw transactions using the SAME open connection
+        raw_transactions = get_transactions(conn, category=category, period=period)
+        
+        # Ensure raw_transactions is a list, even if empty
+        if raw_transactions is None:
+            raw_transactions = []
+
+        # 3. Convert tuples to dictionaries for the service functions
+        transactions = [
+            {
+                "id": tx[0],
+                "amount": tx[1],
+                "date": tx[2],
+                "type": tx[3],
+                "category": tx[4],
+                "description": tx[5]
+            }
+            for tx in raw_transactions
+        ]
+
+        # 4. Use your service logic for calculations
+        total_spent = calculate_total_spent(transactions)
+        remaining = calculate_remaining_budget(total_spent, budget_amount)
+        consumption_pct = calculate_consumption_percentage(total_spent, budget_amount)
+        exceeded = is_budget_exceeded(total_spent, budget_amount)
+        alert = get_budget_alert(total_spent, budget_amount)
+
+        return {
+            "category": category,
+            "period": period,
+            "budget_amount": budget_amount,
+            "total_spent": total_spent,
+            "remaining": remaining,
+            "consumption_pct": consumption_pct,
+            "exceeded": exceeded,
+            "alert": alert
         }
-        for tx in raw_transactions
-    ]
-
-    total_spent = calculate_total_spent(transactions)
-    remaining = calculate_remaining_budget(total_spent, budget["amount"])
-    consumption_pct = calculate_consumption_percentage(total_spent, budget["amount"])
-    exceeded = is_budget_exceeded(total_spent, budget["amount"])
-    alert = get_budget_alert(total_spent, budget["amount"])
-
-    return {
-        "category": category,
-        "period": period,
-        "budget_amount": budget["amount"],
-        "total_spent": total_spent,
-        "remaining": remaining,
-        "consumption_pct": consumption_pct,
-        "exceeded": exceeded,
-        "alert": alert
-    }
+    finally:
+        # Always close the connection, even if an error occurs
+        conn.close()

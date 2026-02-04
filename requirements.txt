@@ -1,3 +1,4 @@
 click 
 pytest
 click.testing
+pytest-cov

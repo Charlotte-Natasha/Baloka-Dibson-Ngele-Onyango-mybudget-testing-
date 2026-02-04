@@ -1,24 +1,22 @@
+import os
 import pytest
+from pathlib import Path
+
+# 1. Manually finds the project root and sets the DB path
+# This ensures both the test and the app use the same 'budget.db'
+BASE_DIR = Path(__file__).resolve().parent.parent
+test_db_path = BASE_DIR / "data" / "budget.db"
+os.environ["BUDGET_DB_PATH"] = str(test_db_path)
+
 from budgetapp.storage.db import init_db, get_connection
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest.fixture(autouse=True)
 def setup_db():
-    """
-    Initializes the DB before any integration test runs.
-    """
-    # Initialize DB tables
-    init_db()
-    
-    # Provide a connection if needed
+    init_db()  # Ensures tables exist
     conn = get_connection()
-    
-    # CLEAR TABLES BEFORE EACH MODULE
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM transactions")
-    cursor.execute("DELETE FROM budgets")
+    cur = conn.cursor()
+    # Wipes data so tests start fresh
+    cur.execute("DELETE FROM transactions")
+    cur.execute("DELETE FROM budgets")
     conn.commit()
-
-    yield conn
     conn.close()
-
-

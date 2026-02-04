@@ -1,4 +1,5 @@
 from datetime import datetime
+from budgetapp.config import BUDGET_WARNING_THRESHOLD
 
 # 1 ere fonction : << Calcul des dépenses totales >>
 
@@ -57,11 +58,17 @@ def get_budget_alert(total_spent, budget_amount):
     if budget_amount == 0:
         return None
 
-    if total_spent <= budget_amount:
-        return None
+    consumption_pct = (total_spent / budget_amount) * 100
 
-    over = total_spent - budget_amount
-    percentage = (total_spent / budget_amount) * 100
+    # ⚠️ Warning if 80% ≤ consumption < 100%
+    if BUDGET_WARNING_THRESHOLD <= consumption_pct < 100:
+        return f"Warning: Budget at {consumption_pct:.1f}% consumed"
 
-    return f"Budget exceeded by {over} ({percentage:.1f}%)"
+    # ❌ Exceeded budget
+    if total_spent > budget_amount:
+        over = total_spent - budget_amount
+        return f"Budget exceeded by {over} ({consumption_pct:.1f}%)"
+
+    # ✅ No alert
+    return None
 
