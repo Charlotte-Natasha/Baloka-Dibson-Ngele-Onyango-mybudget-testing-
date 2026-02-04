@@ -1,9 +1,8 @@
 from budgetapp.storage.db import get_connection
 
-def create_transaction(conn, data):
+def create_transaction(conn=None, data=None):
     if conn is None:
         conn = get_connection()
-        
     cursor = conn.cursor()
 
     description = data.get("description", "")
@@ -21,7 +20,6 @@ def create_transaction(conn, data):
 
 def get_transactions(conn, category=None, start_date=None, end_date=None, period=None):
     cursor = conn.cursor()
-
     query = "SELECT id, amount, date, type, category, description FROM transactions WHERE 1=1"
     params = []
 
@@ -36,6 +34,11 @@ def get_transactions(conn, category=None, start_date=None, end_date=None, period
     if end_date:
         query += " AND date <= ?"
         params.append(end_date)
+
+    if period:
+        # Filter by YYYY-MM format
+        query += " AND strftime('%Y-%m', date) = ?"
+        params.append(period)
 
     cursor.execute(query, params)
     return cursor.fetchall()

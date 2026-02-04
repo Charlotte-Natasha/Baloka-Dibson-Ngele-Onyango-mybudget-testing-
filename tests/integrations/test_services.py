@@ -47,17 +47,13 @@ def test_calculate_consumption_percentage_zero_budget():
     with pytest.raises(ValueError):
         calculate_consumption_percentage(50, 0)
 
-# -------------------------------
 # Test is_budget_exceeded
-# -------------------------------
 
 def test_is_budget_exceeded_true_false():
     assert is_budget_exceeded(150, 100) is True
     assert is_budget_exceeded(50, 100) is False
 
-# -------------------------------
 # Test get_budget_alert
-# -------------------------------
 
 def test_get_budget_alert_none_and_exceeded():
     alert_none = get_budget_alert(50, 100)
