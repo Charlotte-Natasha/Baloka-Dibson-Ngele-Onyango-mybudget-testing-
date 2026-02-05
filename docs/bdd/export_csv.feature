@@ -1,17 +1,17 @@
-Feature: Export transactions
+Fonctionnalité: Exporter les transactions
 
-  As a user, I want to export my transactions so that I can keep a record outside the application.
+  En tant qu'utilisateur, je veux exporter mes transactions afin de conserver un enregistrement en dehors de l'application.
 
-  Scenario: Export all transactions to a CSV file
+  Scénario: Exporter toutes les transactions vers un fichier CSV
 
-    Given the following transactions exist:
+    Soit les transactions suivantes existent:
 
-      | amount | description | category | type    | date        |
-      | 50     | Groceries   | Food     | expense | 2025-01-10  |
-      | 20     | Bus ticket  | Transport| expense | 2025-01-12  |
+      | montant | description | catégorie | type    | date        |
+      | 50      | Courses     | Alimentation| dépense | 2025-01-10  |
+      | 20      | Ticket bus  | Transport | dépense | 2025-01-12  |
 
-    When the user exports all transactions to a CSV file then a CSV file should be generated and the CSV file should contain the following rows:
+    Quand l'utilisateur exporte toutes les transactions vers un fichier CSV alors un fichier CSV devrait être généré et le fichier CSV devrait contenir les lignes suivantes:
     
-      | amount | description | category | type    | date        |
-      | 50     | Groceries   | Food     | expense | 2025-01-10  |
-      | 20     | Bus ticket  | Transport| expense | 2025-01-12  |
+      | montant | description | catégorie | type    | date        |
+      | 50      | Courses     | Alimentation| dépense | 2025-01-10  |
+      | 20      | Ticket bus  | Transport | dépense | 2025-01-12  |

@@ -1,14 +1,14 @@
-Feature: Delete a transaction
-  As a user
-  I want to delete a transaction
-  So that my budget totals are updated correctly
+Fonctionnalité: Supprimer une transaction
+  En tant qu'utilisateur
+  Je veux supprimer une transaction
+  Afin que mes totaux budgétaires soient mis à jour correctement
 
-  Scenario: Delete an expense transaction
-    Given a budget "Food" for "2025-01" with amount 300
-    And the following transactions exist:
-      | amount | category | date       | type    |
-      | 50     | Food     | 2025-01-05 | expense |
-      | 20     | Food     | 2025-01-10 | expense |
-    When I delete the transaction with amount 50 on "2025-01-05"
-    Then the total spent for "Food" in "2025-01" should be 20
-    And the remaining budget should be 280
+  Scénario: Supprimer une transaction de dépense
+    Soit un budget "Alimentation" pour "2025-01" d'un montant de 300
+    Et les transactions suivantes existent:
+      | montant | catégorie | date       | type    |
+      | 50      | Alimentation | 2025-01-05 | dépense |
+      | 20      | Alimentation | 2025-01-10 | dépense |
+    Quand je supprime la transaction de montant 50 le "2025-01-05"
+    Alors le total dépensé pour "Alimentation" en "2025-01" devrait être 20
+    Et le budget restant devrait être 280

@@ -1,141 +1,141 @@
 # Budget Personnel
 
-A command-line application for personal budget management. Track expenses, manage budgets, and monitor spending with an intuitive CLI interface.
+Application en ligne de commande pour la gestion du budget personnel. Suivi des dépenses, gestion des budgets et surveillance des dépenses avec une interface CLI intuitive.
 
-## Features
+## Fonctionnalités
 
-- 💰 **Budget Management** - Create and manage personal budgets
-- 📊 **Transaction Tracking** - Log and categorize expenses
-- 📈 **Budget Status** - View spending status and consumption percentages
-- ⚠️ **Budget Alerts** - Get notified when approaching budget limits
-- 📋 **CSV Export** - Export transactions to CSV for analysis
-- 🧪 **Comprehensive Testing** - Unit and integration tests with BDD features
+- 💰 **Gestion des Budgets** - Créer et gérer les budgets personnels
+- 📊 **Suivi des Transactions** - Enregistrer et catégoriser les dépenses
+- 📈 **État du Budget** - Voir l'état des dépenses et les pourcentages de consommation
+- ⚠️ **Alertes Budget** - Être averti lors de l'approche des limites budgétaires
+- 📋 **Export CSV** - Exporter les transactions en CSV pour analyse
+- 🧪 **Tests Complets** - Tests unitaires et d'intégration avec fonctionnalités BDD
 
-## Project Structure
+## Structure du Projet
 
 ```
 budgetapp/
-├── cli/              # Command-line interface
-├── services/         # Business logic layer
-├── storage/          # Data persistence
-├── utils/            # Utilities (dates, validators)
+├── cli/              # Interface en ligne de commande
+├── services/         # Couche de logique métier
+├── storage/          # Persistance des données
+├── utils/            # Utilitaires (dates, validateurs)
 └── __init__.py
 
 tests/
-├── unit/             # Unit tests
-└── integrations/     # Integration tests
+├── unit/             # Tests unitaires
+└── integrations/     # Tests d'intégration
 
 docs/
-├── architecture.md   # Architecture documentation
-└── bdd/              # BDD feature files
+├── architecture.md   # Documentation architecture
+└── bdd/              # Fichiers fonctionnalités BDD
 ```
 
 ## Architecture
 
-The application follows a **layered architecture**:
+L'application suit une **architecture en couches** :
 
-- **CLI Layer** (`cli/`) - Handles user interaction through command-line commands
-- **Service Layer** (`services/`) - Contains all business logic (budget calculations, percentages, alerts)
-- **Storage Layer** (`storage/`) - Manages data persistence and database operations
+- **Couche CLI** (`cli/`) - Gère l'interaction utilisateur via des commandes en ligne de commande
+- **Couche Service** (`services/`) - Contient toute la logique métier (calculs budgétaires, pourcentages, alertes)
+- **Couche Stockage** (`storage/`) - Gère la persistance des données et les opérations de base de données
 
-This separation ensures the business logic is decoupled from data access, making the code easy to test and maintain.
+Cette séparation assure que la logique métier est découplée de l'accès aux données, facilitant les tests et la maintenance du code.
 
 ## Installation
 
-### Prerequisites
+### Prérequis
 
 - Python 3.x
 - pip
 
-### Setup
+### Configuration
 
-1. Clone or download the repository
-2. Install dependencies:
+1. Cloner ou télécharger le référentiel
+2. Installer les dépendances :
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
+## Utilisation
 
-### Available Commands
+### Commandes Disponibles
 
-#### Add a Budget
-
-```bash
-python -m budgetapp.cli.app add-budget --name "Groceries" --amount 500
-```
-
-#### Log a Transaction
+#### Ajouter un Budget
 
 ```bash
-python -m budgetapp.cli.app add-transaction --budget-id 1 --amount 50.00 --description "Weekly shopping"
+python -m budgetapp.cli.app add-budget --name "Épicerie" --amount 500
 ```
 
-#### View Budget Status
+#### Enregistrer une Transaction
+
+```bash
+python -m budgetapp.cli.app add-transaction --budget-id 1 --amount 50.00 --description "Courses hebdomadaires"
+```
+
+#### Afficher l'État du Budget
 
 ```bash
 python -m budgetapp.cli.app budget-status --budget-id 1
 ```
 
-## Dependencies
+## Dépendances
 
-- **click** - Command-line interface framework
-- **pytest** - Testing framework
+- **click** - Framework interface en ligne de commande
+- **pytest** - Framework de test
 
-See [requirements.txt] for full list.
+Voir [requirements.txt] pour la liste complète.
 
-## Testing
+## Tests
 
-### Run All Tests
+### Exécuter Tous les Tests
 
 ```bash
 pytest
 ```
 
-### Run Unit Tests
+### Exécuter les Tests Unitaires
 
 ```bash
 pytest tests/unit/
 ```
 
-### Run Integration Tests
+### Exécuter les Tests d'Intégration
 
 ```bash
 pytest tests/integrations/
 ```
 
-### Run Tests with Coverage
+### Exécuter les Tests avec Couverture
 
 ```bash
 pytest --cov=budgetapp
 ```
 
-## Features in Development
+## Fonctionnalités en Développement
 
-The following features are defined in BDD format:
+Les fonctionnalités suivantes sont définies au format BDD :
 
-- **Alert Budget** - Budget limit alerts
-- **Edit Transaction** - Modify existing transactions
-- **Export CSV** - Export budget data to CSV format
+- **Alerte Budget** - Alertes de limite budgétaire
+- **Modifier Transaction** - Modifier les transactions existantes
+- **Export CSV** - Exporter les données budgétaires au format CSV
 
-See [docs/bdd/] for feature specifications.
+Voir [docs/bdd/] pour les spécifications des fonctionnalités.
 
 ## Configuration
 
-Configuration settings can be found in [budgetapp/config.py].
+Les paramètres de configuration se trouvent dans [budgetapp/config.py].
 
 ## Documentation
 
-- [Architecture] - Detailed system architecture
-- [BDD Features] - Feature specifications
+- [Architecture] - Architecture système détaillée
+- [Fonctionnalités BDD] - Spécifications des fonctionnalités
 
-## Contributing
+## Contribution
 
-When contributing to this project:
+Lors de la contribution à ce projet :
 
-1. Write tests for new features
-2. Ensure all tests pass
-3. Follow the existing code structure and style
-4. Update documentation as needed
+1. Écrire des tests pour les nouvelles fonctionnalités
+2. S'assurer que tous les tests réussissent
+3. Suivre la structure et le style du code existant
+4. Mettre à jour la documentation si nécessaire
 

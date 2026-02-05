@@ -1,16 +1,16 @@
-Feature: Budget exceeded alert
-  As a user,
-  I want to be alerted when my expenses exceed a budget,
-  So that I can better control my spending.
+Fonctionnalité: Alerte de dépassement budgétaire
+  En tant qu'utilisateur,
+  Je veux être alerté lorsque mes dépenses dépassent un budget,
+  Afin que je puisse mieux contrôler mes dépenses.
 
-  Scenario: Alert is triggered when expenses exceed the budget
-    Given a budget of 300€ exists for category "Food" for period "2025-01"
-    And the following expenses exist for "Food" in "2025-01":
-      | amount | description |
-      | 200    | Groceries   |
-      | 90     | Snacks      |
-    When a new expense of 20€ is added for "Food" on "2025-01-20"
-    Then the total spent should be 310€
-    And the remaining budget should be -10€
-    And the consumption percentage should be 103%
-    And an alert message should be displayed
+  Scénario: Une alerte est déclenchée lorsque les dépenses dépassent le budget
+    Soit un budget de 300€ existe pour la catégorie "Alimentation" pour la période "2025-01"
+    Et les dépenses suivantes existent pour "Alimentation" en "2025-01":
+      | montant | description |
+      | 200     | Courses     |
+      | 90      | Snacks      |
+    Quand une nouvelle dépense de 20€ est ajoutée pour "Alimentation" le "2025-01-20"
+    Alors le total dépensé devrait être 310€
+    Et le budget restant devrait être -10€
+    Et le pourcentage de consommation devrait être 103%
+    Et un message d'alerte devrait s'afficher

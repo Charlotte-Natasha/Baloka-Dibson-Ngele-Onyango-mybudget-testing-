@@ -1,14 +1,14 @@
-Feature: Edit transaction
+Fonctionnalité: Modifier une transaction
 
-  As a user, I want to edit an existing transaction so that I can correct mistakes in amount or category.
+  En tant qu'utilisateur, je veux modifier une transaction existante afin de corriger les erreurs de montant ou de catégorie.
 
-  Scenario: User edits the amount of an existing transaction
+  Scénario: L'utilisateur modifie le montant d'une transaction existante
 
-    Given a transaction exists with:
-      | id | amount | category  | type    | date        |
-      | 1  | 50     | Transport | expense | 2025-01-10  |
+    Soit une transaction existante avec:
+      | id | montant | catégorie  | type    | date        |
+      | 1  | 50      | Transport  | dépense | 2025-01-10  |
 
-    And a budget of 200€ exists for category "Transport" for period "2025-01". 
+    Et un budget de 200€ existe pour la catégorie "Transport" pour la période "2025-01". 
 
-    When the user updates the transaction with id 1 to have amount 30€, then the transaction amount should be updated to 30€
-    and the total spent for "Transport" in "2025-01" should be 30€. 
+    Quand l'utilisateur met à jour la transaction avec l'id 1 pour avoir un montant de 30€, alors le montant de la transaction devrait être mis à jour à 30€
+    et le total dépensé pour "Transport" en "2025-01" devrait être 30€. 
