@@ -5,13 +5,13 @@
 
 **High-Level Architecture**
 
-- **CLI layer:** Handles user commands and input parsing (see [budgetapp/cli/app.py](budgetapp/cli/app.py) and [budgetapp/cli/commands.py](budgetapp/cli/commands.py)).
+- **CLI layer:** Handles user commands and input parsing (see [budgetapp/cli/app.py] and [budgetapp/cli/commands.py]).
 
-- **Service layer:** Core business logic lives in [budgetapp/services](budgetapp/services) — e.g., [budgetapp/services/budget_service.py](budgetapp/services/budget_service.py) and [budgetapp/services/transaction_service.py](budgetapp/services/transaction_service.py).
+- **Service layer:** Core business logic lives in [budgetapp/services] — e.g., [budgetapp/services/budget_service.py] and [budgetapp/services/transaction_service.py].
 
-- **Storage layer:** Persistence and data models under [budgetapp/storage](budgetapp/storage) (database adapter [budgetapp/storage/db.py](budgetapp/storage/db.py), and record modules).
+- **Storage layer:** Persistence and data models under [budgetapp/storage] (database adapter [budgetapp/storage/db.py], and record modules).
 
-- **Utilities:** Shared helpers for validation and dates in [budgetapp/utils](budgetapp/utils) (for example [budgetapp/utils/validators.py](budgetapp/utils/validators.py)).
+- **Utilities:** Shared helpers for validation and dates in [budgetapp/utils] (for example [budgetapp/utils/validators.py]).
 
 - **Configuration:** Global settings in [budgetapp/config.py].
 
