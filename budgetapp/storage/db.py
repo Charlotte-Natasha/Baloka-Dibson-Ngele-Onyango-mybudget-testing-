@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DB_PATH = BASE_DIR / "data" / "budget.db"
 
 # Allow override via environment variable (for pytest)
-DB_PATH = Path(os.getenv("BUDGET_DB_PATH", DEFAULT_DB_PATH))
+DB_PATH = Path(os.getenv("BUDGET_DB_PATH", DEFAULT_DB_PATH)).resolve()
 
 
 def set_db_path(path):
@@ -19,7 +19,7 @@ def set_db_path(path):
 
 def get_connection():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    return sqlite3.connect(DB_PATH)
+    return sqlite3.connect(str(DB_PATH))
 
 
 def init_db():

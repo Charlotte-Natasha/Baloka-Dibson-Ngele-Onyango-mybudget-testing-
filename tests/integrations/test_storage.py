@@ -30,3 +30,4 @@ def test_delete_budget_clears_status():
     delete_budget("Food", "2025-01")
     status = get_budget_status("Food", "2025-01")
     assert status is None
+
