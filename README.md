@@ -152,7 +152,7 @@ BUDGET_DB_PATH=/chemin/vers/budget.db
 ## 🎥 Vidéo Démonstration
 
 Durée : 3–5 minutes  
-Lien : **à insérer ici**
+Lien : [https://drive.google.com/file/d/1vmNx-_JqzhY6uNejzR2syIGkTCUZOKhK/view?usp=sharing](https://drive.google.com/file/d/1vmNx-_JqzhY6uNejzR2syIGkTCUZOKhK/view?usp=sharing)
 
 ---
 
@@ -162,4 +162,5 @@ Lien : **à insérer ici**
 2. Ajouter des tests  
 3. Vérifier que tous les tests passent  
 4. Mettre à jour la documentation  
+
 
